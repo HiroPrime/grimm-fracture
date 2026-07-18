@@ -108,6 +108,7 @@ export default function GrimmFracture() {
           <a href="#story" className="hover:text-[#8b0000] transition-colors">The Story</a>
           <a href="#heroes" className="hover:text-[#8b0000] transition-colors">The Fractured</a>
           <a href="#syndicate" className="hover:text-[#8b0000] transition-colors">Syndicate</a>
+          <a href="/read" className="hover:text-[#8b0000] transition-colors">Read</a>
           <a href="#forge" className="hover:text-[#8b0000] transition-colors hidden sm:inline">The Forge</a>
         </div>
       </header>
@@ -143,9 +144,12 @@ export default function GrimmFracture() {
                 <Flame size={20} /> Explore Leap 1
               </div>
             </div>
-            <p className="text-[#ff4444] font-black tracking-[0.35em] uppercase text-[10px] md:text-xs drop-shadow-xl">
-              Webtoon Link Coming Soon
-            </p>
+            <a
+              href="/read"
+              className="text-[#ff4444] font-black tracking-[0.35em] uppercase text-[10px] md:text-xs drop-shadow-xl hover:text-white transition-colors"
+            >
+              Read Webtoon
+            </a>
           </div>
           
           <div className="absolute -bottom-24 animate-bounce text-[#444] hidden md:block">
