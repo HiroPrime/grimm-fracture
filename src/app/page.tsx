@@ -69,6 +69,7 @@ export default function GrimmFracture() {
           <a href="#story" className="hover:text-[#8b0000] transition-colors">The Story</a>
           <a href="#heroes" className="hover:text-[#8b0000] transition-colors">The Fractured</a>
           <a href="#syndicate" className="hover:text-[#8b0000] transition-colors">Syndicate</a>
+          <a href="#forge" className="hover:text-[#8b0000] transition-colors hidden sm:inline">The Forge</a>
         </div>
       </header>
 
@@ -97,12 +98,15 @@ export default function GrimmFracture() {
             </h1>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4">
+          <div className="flex flex-col items-center gap-4 mt-4">
             <div role="button" onClick={() => setShowLeap1(true)} className="inline-flex items-center justify-center gap-3 cursor-pointer bg-[#8b0000] text-white border-2 border-[#8b0000] px-10 py-4 md:px-12 md:py-5 rounded-sm font-black uppercase tracking-widest text-xs md:text-base hover:bg-red-700 hover:scale-105 transition-all skew-x-[-10deg]">
               <div className="skew-x-[10deg] flex items-center gap-3">
                 <Flame size={20} /> Explore Leap 1
               </div>
             </div>
+            <p className="text-[#ff4444] font-black tracking-[0.35em] uppercase text-[10px] md:text-xs drop-shadow-xl">
+              Webtoon Link Coming Soon
+            </p>
           </div>
           
           <div className="absolute -bottom-24 animate-bounce text-[#444] hidden md:block">
@@ -237,9 +241,43 @@ export default function GrimmFracture() {
       </section>
 
       {/* ========================================== */}
+      {/* THE FORGE: AI-ASSISTED PRODUCTION */}
+      {/* ========================================== */}
+      <section id="forge" className="relative w-full py-24 md:py-32 px-6 md:px-12 bg-[#050505] z-20 border-t border-[#1a1a1a] flex flex-col items-center text-center overflow-hidden">
+        <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ background: "radial-gradient(circle at 30% 40%, #2e4a22 0%, transparent 55%), radial-gradient(circle at 80% 70%, #8b0000 0%, transparent 50%)" }} />
+
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <h3 className="text-[#ff4444] font-black tracking-[0.4em] text-xs md:text-sm mb-6 uppercase">
+            The Forge // AI Assisted
+          </h3>
+          <h2 className="text-3xl md:text-6xl font-black tracking-tighter uppercase comic-text text-white mb-8 leading-[0.95]">
+            Generative power from <span className="text-[#8b0000]">Gemini.</span><br className="hidden md:block" />
+            Heavy design by <span className="text-white">BasicHiro.</span>
+          </h2>
+          <p className="text-base md:text-xl text-gray-400 font-medium leading-relaxed mb-8 max-w-3xl mx-auto">
+            Grimm Fracture is produced with Gemini for generative art and story assistance — outlining, idea sprints, and immediate iteration with feedback. A locked series bible keeps character descriptions in memory so Gemini can render accurate, consistent Fractured and Syndicate designs at speed.
+          </p>
+          <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed mb-12 max-w-3xl mx-auto">
+            Direction, design, and final production stay with BasicHiro. AI enhances craft and publishing time — it does not replace the hand on the page.
+          </p>
+
+          <div className="h-1 w-24 bg-[#8b0000] mx-auto mb-10" />
+
+          <p className="text-[10px] md:text-xs font-black tracking-[0.35em] uppercase text-gray-500">
+            Ideas <span className="text-[#8b0000] mx-2">→</span>
+            Outline <span className="text-[#8b0000] mx-2">→</span>
+            Iterate <span className="text-[#8b0000] mx-2">→</span>
+            Lock characters <span className="text-[#8b0000] mx-2">→</span>
+            Generate <span className="text-[#8b0000] mx-2">→</span>
+            Ship pages
+          </p>
+        </div>
+      </section>
+
+      {/* ========================================== */}
       {/* NEWSLETTER SIGNUP */}
       {/* ========================================== */}
-      <section className="relative w-full py-24 px-6 md:px-12 bg-[#050505] z-20 border-t border-[#1a1a1a] flex flex-col items-center text-center">
+      <section className="relative w-full py-24 px-6 md:px-12 bg-black z-20 border-t border-[#1a1a1a] flex flex-col items-center text-center">
         <div className="max-w-3xl mx-auto w-full">
           <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase comic-text text-white mb-6">
             Join the <span className="text-[#8b0000]">Travelers.</span>
@@ -290,7 +328,12 @@ export default function GrimmFracture() {
             <h1 className="text-3xl md:text-4xl font-black tracking-tighter uppercase comic-text leading-[0.85] text-[#222]">GRIMM FRACTURE</h1>
           </div>
           <p className="text-[#8b0000] font-black tracking-[0.4em] uppercase text-[10px] md:text-sm mt-4">A Core Node Original</p>
-          <p className="text-gray-600 font-bold tracking-[0.2em] uppercase text-[8px] md:text-[10px] mt-4">Written & Designed by BasicHiro</p>
+          <p className="text-gray-600 font-bold tracking-[0.2em] uppercase text-[8px] md:text-[10px] mt-4">
+            Heavy design & production by BasicHiro
+          </p>
+          <p className="text-gray-700 font-bold tracking-[0.15em] uppercase text-[8px] md:text-[10px] mt-3">
+            Generative art & story assisted by Gemini
+          </p>
       </footer>
 
 

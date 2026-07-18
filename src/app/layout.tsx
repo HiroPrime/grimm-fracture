@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Grimm Fracture | Web Comic Series by BasicHiro",
   description:
-    "Grimm Fracture — an original web comic series by BasicHiro. Follow Red and Alice as they leap through fractured fables. New pages drop for Travelers first.",
+    "Grimm Fracture — an original web comic series by BasicHiro. Generative art and story assisted by Gemini; heavy design and production by BasicHiro. New pages drop for Travelers first.",
 };
 
 export default function RootLayout({
