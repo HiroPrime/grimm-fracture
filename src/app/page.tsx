@@ -1,12 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { Menu, ChevronRight, Target, ArrowDown, X, Map, Skull, Users, Feather, Flame } from "lucide-react";
-import { createClient } from '@supabase/supabase-js';
-
-// Initialize Supabase Client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function GrimmFracture() {
   const [showLeap1, setShowLeap1] = useState(false);
@@ -32,24 +26,69 @@ export default function GrimmFracture() {
     if (!email) return;
     
     setStatus('loading');
-    
-    const { error } = await supabase
-      .from('newsletter')
-      .insert([{ email }]);
+    setErrorMessage('');
 
-    if (error) {
-      if (error.code === '23505') {
-        // 23505 is the Postgres code for unique violation (already subscribed)
-        setStatus('success'); 
-      } else {
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
         setStatus('error');
-        setErrorMessage(error.message);
+        setErrorMessage(data.error || 'Could not reach the ledger.');
+        return;
       }
-    } else {
+
       setStatus('success');
       setEmail('');
+    } catch {
+      setStatus('error');
+      setErrorMessage('Could not reach the ledger. Check your connection.');
     }
   };
+
+  const renderSubscribeForm = () => (
+    <>
+      <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-xl mx-auto">
+        <input 
+          type="email" 
+          placeholder="ENTER YOUR EMAIL..." 
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={status === 'loading' || status === 'success'}
+          className="w-full bg-[#0a0a0a] border-2 border-[#333] focus:border-[#8b0000] text-white px-6 py-4 rounded-sm font-black tracking-widest uppercase text-xs md:text-sm outline-none transition-colors disabled:opacity-50"
+        />
+        <button 
+          type="submit"
+          disabled={status === 'loading' || status === 'success'}
+          className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-3 bg-[#8b0000] text-white border-2 border-[#8b0000] px-8 py-4 rounded-sm font-black uppercase tracking-widest text-xs md:text-sm hover:bg-red-700 transition-all skew-x-[-10deg] disabled:opacity-50 disabled:hover:bg-[#8b0000] disabled:cursor-not-allowed"
+        >
+          <div className="skew-x-[10deg] flex items-center gap-2">
+            {status === 'loading' ? 'SCRIBING...' : status === 'success' ? 'OATH SEALED' : <><Feather size={16}/> SIGN LEDGER</>}
+          </div>
+        </button>
+      </form>
+
+      <p className="text-gray-600 font-bold tracking-[0.2em] uppercase text-[9px] md:text-[10px] mt-6">
+        From <a href="mailto:basichiro@corenode.com" className="text-[#8b0000] hover:text-[#ff4444] transition-colors">basichiro@corenode.com</a>
+      </p>
+
+      {status === 'success' && (
+        <p className="text-[#ff4444] font-black tracking-widest uppercase mt-4 text-sm">
+          The ink is dry. Welcome to the Travelers.
+        </p>
+      )}
+      {status === 'error' && (
+        <p className="text-red-500 font-bold mt-4 text-xs uppercase">
+          The ink spilled: {errorMessage}
+        </p>
+      )}
+    </>
+  );
 
   return (
     <main className="min-h-screen bg-[#050505] text-white font-sans selection:bg-[#8b0000] selection:text-white">
@@ -115,6 +154,24 @@ export default function GrimmFracture() {
         </div>
 
         <div className="absolute bottom-0 left-0 w-full h-16 bg-[#050505] z-30" style={{ clipPath: "polygon(0% 100%, 5% 20%, 10% 80%, 15% 10%, 20% 90%, 25% 30%, 30% 100%, 35% 10%, 40% 80%, 45% 20%, 50% 100%, 55% 10%, 60% 90%, 65% 20%, 70% 100%, 75% 30%, 80% 80%, 85% 10%, 90% 90%, 95% 20%, 100% 100%)" }}></div>
+      </section>
+
+      {/* ========================================== */}
+      {/* SUBSCRIBE — under hero */}
+      {/* ========================================== */}
+      <section id="subscribe" className="relative w-full py-16 md:py-20 px-6 md:px-12 bg-[#050505] z-20 border-b border-[#1a1a1a] flex flex-col items-center text-center">
+        <div className="max-w-3xl mx-auto w-full">
+          <h3 className="text-[#ff4444] font-black tracking-[0.4em] text-[10px] md:text-xs mb-4 uppercase">
+            Subscribe
+          </h3>
+          <h2 className="text-2xl md:text-4xl font-black tracking-tighter uppercase comic-text text-white mb-4">
+            Join the <span className="text-[#8b0000]">Travelers.</span>
+          </h2>
+          <p className="text-gray-400 font-medium mb-8 text-sm md:text-base max-w-xl mx-auto">
+            Get new page drops, early concept art, and story snips. No spam — just lore from the ledger.
+          </p>
+          {renderSubscribeForm()}
+        </div>
       </section>
 
       {/* ========================================== */}
@@ -280,43 +337,12 @@ export default function GrimmFracture() {
       <section className="relative w-full py-24 px-6 md:px-12 bg-black z-20 border-t border-[#1a1a1a] flex flex-col items-center text-center">
         <div className="max-w-3xl mx-auto w-full">
           <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase comic-text text-white mb-6">
-            Join the <span className="text-[#8b0000]">Travelers.</span>
+            Still outside the <span className="text-[#8b0000]">ledger?</span>
           </h2>
           <p className="text-gray-400 font-medium mb-10 text-sm md:text-base">
             Learn when new pages drop. See early concept art and story snips before anyone else. No spam, just pure lore.
           </p>
-
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-xl mx-auto">
-            <input 
-              type="email" 
-              placeholder="ENTER YOUR EMAIL..." 
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={status === 'loading' || status === 'success'}
-              className="w-full bg-[#0a0a0a] border-2 border-[#333] focus:border-[#8b0000] text-white px-6 py-4 rounded-sm font-black tracking-widest uppercase text-xs md:text-sm outline-none transition-colors disabled:opacity-50"
-            />
-            <button 
-              type="submit"
-              disabled={status === 'loading' || status === 'success'}
-              className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-3 bg-[#8b0000] text-white border-2 border-[#8b0000] px-8 py-4 rounded-sm font-black uppercase tracking-widest text-xs md:text-sm hover:bg-red-700 transition-all skew-x-[-10deg] disabled:opacity-50 disabled:hover:bg-[#8b0000] disabled:cursor-not-allowed"
-            >
-              <div className="skew-x-[10deg] flex items-center gap-2">
-                {status === 'loading' ? 'SCRIBING...' : status === 'success' ? 'OATH SEALED' : <><Feather size={16}/> SIGN LEDGER</>}
-              </div>
-            </button>
-          </form>
-
-          {status === 'success' && (
-            <p className="text-[#ff4444] font-black tracking-widest uppercase mt-6 text-sm">
-              The ink is dry. Welcome to the Travelers.
-            </p>
-          )}
-          {status === 'error' && (
-            <p className="text-red-500 font-bold mt-4 text-xs uppercase">
-              The ink spilled: {errorMessage}
-            </p>
-          )}
+          {renderSubscribeForm()}
         </div>
       </section>
 
