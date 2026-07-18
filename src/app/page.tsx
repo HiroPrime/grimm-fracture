@@ -85,7 +85,7 @@ export default function GrimmFracture() {
 
         <div className="relative z-20 flex flex-col items-center text-center px-4 mt-16 max-w-full">
           <h2 className="text-[#ff4444] font-black tracking-[0.5em] text-[10px] md:text-sm mb-6 uppercase drop-shadow-xl">
-            A Graphic Novel by BasicHiro
+            A Web Comic Series by BasicHiro
           </h2>
           
           <div className="flex flex-col items-center justify-center transform -rotate-2 mb-10 pointer-events-none">
@@ -245,7 +245,7 @@ export default function GrimmFracture() {
             Join the <span className="text-[#8b0000]">Travelers.</span>
           </h2>
           <p className="text-gray-400 font-medium mb-10 text-sm md:text-base">
-            Learn when new Issues are released. See early concept art and story snips before anyone else. No spam, just pure lore.
+            Learn when new pages drop. See early concept art and story snips before anyone else. No spam, just pure lore.
           </p>
 
           <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-xl mx-auto">
