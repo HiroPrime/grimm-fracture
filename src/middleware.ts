@@ -28,8 +28,12 @@ export async function middleware(request: NextRequest) {
     secure: process.env.NODE_ENV === "production",
   });
 
+  // Prefer service role when present; otherwise use anon against the
+  // security-definer RPC (execute granted to anon on Nexus).
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (url && key) {
     void fetch(`${url}/rest/v1/rpc/record_unique_visitor`, {
       method: "POST",
