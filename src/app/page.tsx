@@ -1,10 +1,14 @@
 "use client";
 import { useState, useEffect } from 'react';
+import type { User } from "@supabase/supabase-js";
 import { Menu, ChevronRight, Target, ArrowDown, X, Map, Skull, Users, Feather, Flame } from "lucide-react";
+import NexusAuthModal, { NexusAuthTrigger } from "@/components/NexusAuthModal";
 
 export default function GrimmFracture() {
   const [showLeap1, setShowLeap1] = useState(false);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
   
   // Newsletter State
   const [email, setEmail] = useState('');
@@ -92,6 +96,12 @@ export default function GrimmFracture() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white font-sans selection:bg-[#8b0000] selection:text-white">
+      <NexusAuthModal
+        open={authOpen}
+        onClose={() => setAuthOpen(false)}
+        user={user}
+        onUserChange={setUser}
+      />
       
       {/* ========================================== */}
       {/* STICKY NAVIGATION */}
@@ -104,12 +114,13 @@ export default function GrimmFracture() {
           </span>
         </div>
         
-        <div className="flex gap-4 md:gap-8 font-black tracking-widest text-[10px] md:text-xs uppercase pointer-events-auto">
+        <div className="flex gap-4 md:gap-8 font-black tracking-widest text-[10px] md:text-xs uppercase pointer-events-auto items-center">
           <a href="#story" className="hover:text-[#8b0000] transition-colors">The Story</a>
           <a href="#heroes" className="hover:text-[#8b0000] transition-colors">The Fractured</a>
           <a href="#syndicate" className="hover:text-[#8b0000] transition-colors">Syndicate</a>
           <a href="/read" className="hover:text-[#8b0000] transition-colors">Read</a>
           <a href="#forge" className="hover:text-[#8b0000] transition-colors hidden sm:inline">The Forge</a>
+          <NexusAuthTrigger user={user} onOpen={() => setAuthOpen(true)} />
         </div>
       </header>
 
@@ -175,6 +186,9 @@ export default function GrimmFracture() {
             Get new page drops, early concept art, and story snips. No spam — just lore from the ledger.
           </p>
           {renderSubscribeForm()}
+          <div className="mt-8">
+            <NexusAuthTrigger user={user} onOpen={() => setAuthOpen(true)} />
+          </div>
         </div>
       </section>
 

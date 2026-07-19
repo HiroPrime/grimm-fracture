@@ -13,15 +13,14 @@ export async function POST(request: Request) {
     }
 
     const supabase = getSupabase();
-    const { error } = await supabase.from("newsletter").insert([{ email }]);
+    const { error } = await supabase.from("grimm_newsletter").insert([{ email }]);
 
     if (error) {
-      // Unique violation — already subscribed
       if (error.code === "23505") {
         return NextResponse.json({ ok: true, alreadySubscribed: true });
       }
 
-      console.error("newsletter insert failed:", error.message);
+      console.error("grimm_newsletter insert failed:", error.message);
       return NextResponse.json(
         { error: "Could not reach the ledger. Try again in a moment." },
         { status: 502 }

@@ -1,12 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { SITE_ID, VISITOR_COOKIE } from "@/lib/site-ids";
 
-const COOKIE = "gf_vid";
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only count document navigations to the site, not API/assets.
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
@@ -16,12 +15,12 @@ export async function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-  if (request.cookies.has(COOKIE)) {
+  if (request.cookies.has(VISITOR_COOKIE)) {
     return response;
   }
 
   const visitorId = crypto.randomUUID();
-  response.cookies.set(COOKIE, visitorId, {
+  response.cookies.set(VISITOR_COOKIE, visitorId, {
     path: "/",
     maxAge: ONE_YEAR,
     sameSite: "lax",
@@ -32,15 +31,17 @@ export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (url && key) {
-    // Fire-and-forget unique visitor increment (do not block the response).
-    void fetch(`${url}/rest/v1/rpc/increment_unique_visitors`, {
+    void fetch(`${url}/rest/v1/rpc/record_unique_visitor`, {
       method: "POST",
       headers: {
         apikey: key,
         Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
       },
-      body: "{}",
+      body: JSON.stringify({
+        p_site_id: SITE_ID,
+        p_visitor_key: visitorId,
+      }),
     }).catch(() => {});
   }
 

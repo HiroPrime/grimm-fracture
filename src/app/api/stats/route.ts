@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase";
+import { createServiceClient, createClient } from "@/lib/supabase/server";
+import { SITE_ID } from "@/lib/site-ids";
 
 const METRIC_LABEL = "Population";
 
@@ -24,11 +25,11 @@ export async function OPTIONS() {
 
 export async function GET() {
   try {
-    const supabase = getSupabaseAdmin();
+    const supabase = createServiceClient() ?? (await createClient());
     const { data, error } = await supabase
       .from("site_metrics")
       .select("total_unique_visitors")
-      .eq("id", 1)
+      .eq("site_id", SITE_ID)
       .maybeSingle();
 
     if (error) {
